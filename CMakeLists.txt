@@ -236,6 +236,7 @@ SET(LIB_SOURCE_FILES
     lib/handler/headers.c
     lib/handler/mimemap.c
     lib/handler/proxy.c
+    lib/handler/proxy_s3tile.c
     lib/handler/redirect.c
     lib/handler/reproxy.c
     lib/handler/status.c
@@ -247,6 +248,7 @@ SET(LIB_SOURCE_FILES
     lib/handler/configurator/file.c
     lib/handler/configurator/headers.c
     lib/handler/configurator/proxy.c
+    lib/handler/configurator/proxy_s3tile.c
     lib/handler/configurator/redirect.c
     lib/handler/configurator/reproxy.c
     lib/handler/configurator/status.c
