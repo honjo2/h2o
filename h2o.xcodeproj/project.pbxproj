@@ -218,6 +218,8 @@
 		10FCC13F1B2E4A4500F13674 /* cloexec.h in Headers */ = {isa = PBXBuildFile; fileRef = 10FCC13D1B2E4A4500F13674 /* cloexec.h */; };
 		10FCC1401B2E59E600F13674 /* cloexec.c in Sources */ = {isa = PBXBuildFile; fileRef = 10FCC13C1B2E4A4500F13674 /* cloexec.c */; };
 		10FFEE0A1BB23A8C0087AD75 /* neverbleed.c in Sources */ = {isa = PBXBuildFile; fileRef = 10FFEE081BB23A8C0087AD75 /* neverbleed.c */; };
+		AEF223621D16BACC00FCC6CE /* proxy_s3tile.c in Sources */ = {isa = PBXBuildFile; fileRef = AEF223611D16BACC00FCC6CE /* proxy_s3tile.c */; };
+		AEF223641D16BAE900FCC6CE /* proxy_s3tile.c in Sources */ = {isa = PBXBuildFile; fileRef = AEF223631D16BAE900FCC6CE /* proxy_s3tile.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -604,6 +606,8 @@
 		10FCC1431B31408B00F13674 /* fastcgi_directives.mt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fastcgi_directives.mt; sourceTree = "<group>"; };
 		10FFEE081BB23A8C0087AD75 /* neverbleed.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = neverbleed.c; sourceTree = "<group>"; };
 		10FFEE091BB23A8C0087AD75 /* neverbleed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = neverbleed.h; sourceTree = "<group>"; };
+		AEF223611D16BACC00FCC6CE /* proxy_s3tile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = proxy_s3tile.c; sourceTree = "<group>"; };
+		AEF223631D16BAE900FCC6CE /* proxy_s3tile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = proxy_s3tile.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -739,6 +743,7 @@
 				10AA2EA41A8D9999004322AC /* redirect.c */,
 				10AA2EC31AA0403A004322AC /* reproxy.c */,
 				10835E021C9A860000197E59 /* status.c */,
+				AEF223631D16BAE900FCC6CE /* proxy_s3tile.c */,
 			);
 			path = handler;
 			sourceTree = "<group>";
@@ -846,6 +851,7 @@
 				10AA2EA61A8DA93C004322AC /* redirect.c */,
 				10AA2EC11AA0402E004322AC /* reproxy.c */,
 				10835E041C9B3C6200197E59 /* status.c */,
+				AEF223611D16BACC00FCC6CE /* proxy_s3tile.c */,
 			);
 			path = configurator;
 			sourceTree = "<group>";
@@ -1651,6 +1657,7 @@
 				107923C719A3217300C52AD6 /* hpack.c in Sources */,
 				10A3D40A1B50DAB700327CF9 /* recv.c in Sources */,
 				101788B219B561AA0084C6D8 /* socket.c in Sources */,
+				AEF223641D16BAE900FCC6CE /* proxy_s3tile.c in Sources */,
 				10D0905519F102C70043D458 /* http1client.c in Sources */,
 				10DA969E1CD2BFAC00679165 /* cache.c in Sources */,
 				107923D219A3217300C52AD6 /* token.c in Sources */,
@@ -1706,6 +1713,7 @@
 				105534EF1A440FC800627ECB /* config.c in Sources */,
 				10E299581A67E68500701AA6 /* scheduler.c in Sources */,
 				107923D319A3217300C52AD6 /* util.c in Sources */,
+				AEF223621D16BACC00FCC6CE /* proxy_s3tile.c in Sources */,
 				105534CA1A3BB46900627ECB /* string.c in Sources */,
 				1022E7C11CA8BC9E00CE2A05 /* send_text.c in Sources */,
 				104481301BFD10450007863F /* filecache.c in Sources */,
