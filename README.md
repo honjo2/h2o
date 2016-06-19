@@ -11,3 +11,27 @@ Not only is it very fast, it also provides much quicker response to end-users wh
 Written in C and licensed under [the MIT License](http://opensource.org/licenses/MIT), it can also be used as a library.
 
 For more information, please refer to the documentation at [h2o.examp1e.net](https://h2o.examp1e.net).
+
+===
+
+# fork
+- S3のタイルをリバースプロキシする`s3tile.proxy.reverse.url`を追加した
+
+# 動機
+- [リクエスト率およびリクエストパフォーマンスに関する留意事項](https://docs.aws.amazon.com/ja_jp/AmazonS3/latest/dev/request-rate-perf-considerations.html)
+
+# confファイル
+```confファイル
+paths:
+  /tile:
+    s3tile.proxy.reverse.url: http://s3-ap-northeast-1.amazonaws.com
+```
+
+# 説明
+`http://localhost:8080/tile/honjo2-testtile/17/116417/51630.png`
+
+こう呼ぶと
+
+`http://s3-ap-northeast-1.amazonaws.com/honjo2-testtile/t6he-17/116417/51630.png`
+
+これが呼ばれる
