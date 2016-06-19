@@ -1529,6 +1529,7 @@ static void setup_configurators(void)
     h2o_file_register_configurator(&conf.globalconf);
     h2o_headers_register_configurator(&conf.globalconf);
     h2o_proxy_register_configurator(&conf.globalconf);
+    h2o_s3tile_proxy_register_configurator(&conf.globalconf);
     h2o_reproxy_register_configurator(&conf.globalconf);
     h2o_redirect_register_configurator(&conf.globalconf);
     h2o_status_register_configurator(&conf.globalconf);
