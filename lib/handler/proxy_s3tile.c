@@ -1,4 +1,5 @@
 #include <sys/un.h>
+#include <openssl/md5.h>
 #include "h2o.h"
 #include "h2o/socketpool.h"
 
@@ -9,29 +10,31 @@ struct rp_handler_t {
     h2o_proxy_config_vars_t config;
 };
 
-static void hashed(char *ret, char dname, size_t z, size_t x, size_t y) {
-    char zindex = z - 36 * (z / 36);
-    if (zindex < 10)
-        zindex += 48;
-    else
-        zindex += 87;
+static void md5_short(char *ret, char *key, size_t len) {
+    MD5_CTX c;
+    unsigned char md[MD5_DIGEST_LENGTH];
+    int r, i;
     
-    char xindex = x - 36 * (x / 36);
-    if (xindex < 10)
-        xindex += 48;
-    else
-        xindex += 87;
+    r = MD5_Init(&c);
+    if(r != 1) {
+        perror("init");
+        exit(1);
+    }
     
-    char yindex = y - 36 * (y / 36);
-    if (yindex < 10)
-        yindex += 48;
-    else
-        yindex += 87;
+    r = MD5_Update(&c, key, len);
+    if(r != 1) {
+        perror("update");
+        exit(1);
+    }
     
-    ret[0] = xindex;
-    ret[1] = yindex;
-    ret[2] = zindex;
-    ret[3] = dname;
+    r = MD5_Final(md, &c);
+    if(r != 1) {
+        perror("final");
+        exit(1);
+    }
+    
+    for(i = 0; i < 2; i++)
+        sprintf(&ret[i * 2], "%02x", (unsigned int)md[i]);
 }
 
 static int on_req(h2o_handler_t *_self, h2o_req_t *req)
@@ -75,6 +78,7 @@ static int on_req(h2o_handler_t *_self, h2o_req_t *req)
     size_t ext_s = 0;
     size_t ext_e = 0;
     size_t slash_c = 0;
+    size_t pathonly_e = 0;
     
     size_t i;
     size_t len = strlen(path);
@@ -103,12 +107,21 @@ static int on_req(h2o_handler_t *_self, h2o_req_t *req)
         } else if (path[i] == '.') {
             y_e = i;
             ext_s = i + 1;
+        } else if (path[i] == '?') {
+            pathonly_e = i;
         } else if (path[i] == ' ') {
             ext_e = i;
             break;
         }
-        
     }
+    
+    size_t hashkey_l = (pathonly_e > 0 ? pathonly_e : ext_e) - dname_s;
+    char hashkey_c[hashkey_l + 1];
+    strncpy(hashkey_c, path+dname_s, hashkey_l);
+    hashkey_c[hashkey_l] = '\0';
+    
+    char hashed[5];
+    md5_short(hashed, hashkey_c, hashkey_l);
     
     if (dname_s == 0 || dname_e == 0 || z_s == 0 || z_e == 0 || x_s == 0 || x_e == 0 || y_s == 0 || y_e == 0 || ext_s == 0 || ext_e == 0)
         return 1;
@@ -141,16 +154,9 @@ static int on_req(h2o_handler_t *_self, h2o_req_t *req)
     strncpy(ext_c, path+ext_s, ext_l);
     ext_c[ext_l] = '\0';
     
-    size_t z_i = atoi(z_c);
-    size_t x_i = atoi(x_c);
-    size_t y_i = atoi(y_c);
+    h2o_iovec_t prefix = h2o_iovec_init(hashed, 4);
     
-    char hashed_c[4];
-    hashed(hashed_c, dname_c[dname_l-1], z_i, x_i, y_i);
-    
-    h2o_iovec_t hash = h2o_iovec_init(hashed_c, 4);
-    
-    h2o_iovec_t parts[12]; // [/] [honjo2-testtile] [/] [t6he] [-] [17] [/] [116417] [/] [51630] [.] [png]
+    h2o_iovec_t parts[12]; // [/] [honjo2-testtile] [/] [8f18] [-] [17] [/] [116417] [/] [51630] [.] [png]
     size_t num_parts = 0;
     
     h2o_iovec_t slash_t = h2o_iovec_init(H2O_STRLIT("/"));
@@ -158,7 +164,7 @@ static int on_req(h2o_handler_t *_self, h2o_req_t *req)
     parts[num_parts++] = slash_t;
     parts[num_parts++] = h2o_iovec_init(H2O_STRLIT(dname_c));
     parts[num_parts++] = slash_t;
-    parts[num_parts++] = hash;
+    parts[num_parts++] = prefix;
     parts[num_parts++] = h2o_iovec_init(H2O_STRLIT("-"));
     parts[num_parts++] = h2o_iovec_init(H2O_STRLIT(z_c));
     parts[num_parts++] = slash_t;
